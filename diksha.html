@@ -1,0 +1,1062 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeBloom | Interactive Learning</title>
+
+<style>
+:root {
+    --purple: #8055e8;
+    --pink: #ed9edc;
+    --bg: #faf8ff;
+    --text: #28243b;
+    --muted: #77738b;
+    --border: #e9e3f4;
+    --white: #fff;
+    --dark: #191827;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+}
+
+button, a {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+header {
+    height: 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6%;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--purple);
+    cursor: pointer;
+}
+
+.header-btn, .primary {
+    background: var(--purple);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 17px;
+}
+
+.layout {
+    display: flex;
+    min-height: calc(100vh - 72px);
+}
+
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: white;
+    border-right: 1px solid var(--border);
+    padding: 28px 16px;
+}
+
+.sidebar h4 {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    padding: 0 12px;
+    margin: 22px 0 9px;
+}
+
+.topic {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 9px;
+    text-align: left;
+    background: transparent;
+    color: #55516c;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.topic:hover, .topic.active {
+    background: #f0eaff;
+    color: var(--purple);
+    font-weight: bold;
+}
+
+main {
+    flex: 1;
+    min-width: 0;
+    padding: 42px 5%;
+}
+
+.screen {
+    display: none;
+    animation: appear .3s ease;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero {
+    padding: 50px 35px;
+    border-radius: 24px;
+    background: linear-gradient(120deg, #eee5ff, #ffeafa, #e5f1ff);
+    margin-bottom: 35px;
+}
+
+.eyebrow {
+    color: var(--purple);
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+h1 {
+    font-size: clamp(32px, 4vw, 49px);
+    line-height: 1.2;
+    margin: 15px 0;
+}
+
+h2 {
+    font-size: 29px;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: var(--muted);
+    margin-bottom: 15px;
+}
+
+.gradient {
+    color: var(--purple);
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 17px;
+    margin: 25px 0;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 24px;
+    border-radius: 16px;
+    transition: .25s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    border-color: #c8b5fa;
+    box-shadow: 0 12px 25px #39215b0c;
+}
+
+.card .emoji {
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 14px;
+}
+
+.card button {
+    border: none;
+    background: #f0eaff;
+    color: var(--purple);
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.lesson-intro {
+    margin-bottom: 28px;
+}
+
+.lesson-number {
+    display: inline-block;
+    padding: 5px 12px;
+    background: #eee7ff;
+    color: var(--purple);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.lesson-box {
+    padding: 25px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: white;
+    margin-bottom: 22px;
+}
+
+.lesson-box p {
+    margin-bottom: 10px;
+}
+
+.code {
+    background: var(--dark);
+    color: #e9e4ff;
+    padding: 22px;
+    border-radius: 12px;
+    overflow-x: auto;
+    margin: 15px 0;
+    font: 14px/1.9 Consolas, monospace;
+    white-space: pre-wrap;
+}
+
+.code .pink { color: #ffaddc; }
+.code .blue { color: #91d8ff; }
+.code .green { color: #a6e3a1; }
+
+.output {
+    background: #f5f0ff;
+    border: 1px dashed #c4aff7;
+    border-radius: 12px;
+    padding: 22px;
+    margin-top: 14px;
+}
+
+.output h2 {
+    color: var(--purple);
+}
+
+.tip {
+    background: #fff5df;
+    border-left: 4px solid #efb94f;
+    padding: 15px;
+    border-radius: 5px;
+    color: #665128;
+    margin: 18px 0;
+}
+
+.lesson-nav {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.secondary {
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text);
+    padding: 11px 16px;
+    border-radius: 10px;
+}
+
+.quiz-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 13px;
+    margin: 10px 0;
+}
+
+.quiz-option:hover {
+    border-color: var(--purple);
+}
+
+.quiz-option.correct {
+    background: #e8fff2;
+    border-color: #42a879;
+}
+
+.quiz-option.wrong {
+    background: #fff0f1;
+    border-color: #e87889;
+}
+
+#quiz-feedback {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    border-top: 1px solid var(--border);
+    background: white;
+    font-size: 13px;
+}
+
+@media (max-width: 760px) {
+    header {
+        padding: 0 4%;
+    }
+
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 12px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar h4 {
+        margin-top: 10px;
+    }
+
+    .topic {
+        display: inline-block;
+        width: auto;
+        margin-right: 4px;
+        padding: 9px;
+    }
+
+    main {
+        padding: 25px 5%;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        padding: 30px 22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo" onclick="showScreen('home')">✿ CodeBloom</div>
+    <button class="header-btn" onclick="showScreen('quiz')">
+        Take Quiz →
+    </button>
+</header>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <h4>GET STARTED</h4>
+
+        <button class="topic active" data-screen="home"
+            onclick="showScreen('home')">🏠 Home</button>
+
+        <h4>HTML LEARNING</h4>
+
+        <button class="topic" data-screen="html"
+            onclick="showScreen('html')">📄 HTML Basics</button>
+
+        <button class="topic" data-screen="elements"
+            onclick="showScreen('elements')">🧱 HTML Elements</button>
+
+        <h4>CSS LEARNING</h4>
+
+        <button class="topic" data-screen="css"
+            onclick="showScreen('css')">🎨 CSS Basics</button>
+
+        <button class="topic" data-screen="box"
+            onclick="showScreen('box')">📦 CSS Box Model</button>
+
+        <button class="topic" data-screen="layout"
+            onclick="showScreen('layout')">📐 Flexbox & Grid</button>
+
+        <button class="topic" data-screen="responsive"
+            onclick="showScreen('responsive')">📱 Responsive Design</button>
+
+        <h4>TEST YOURSELF</h4>
+
+        <button class="topic" data-screen="quiz"
+            onclick="showScreen('quiz')">🧠 Practice Quiz</button>
+
+    </aside>
+
+
+    <main>
+
+        <!-- HOME PAGE -->
+
+        <section class="screen active" id="home">
+
+            <div class="hero">
+                <span class="eyebrow">YOUR CREATIVE CODING CLASSROOM</span>
+
+                <h1>Learn. Build.<br>
+                    <span class="gradient">Bloom into a Developer.</span>
+                </h1>
+
+                <p>
+                    Learn HTML and CSS step by step through easy explanations,
+                    code examples and visual outputs. Start from the basics
+                    and move towards moderate-level concepts.
+                </p>
+
+                <button class="primary" onclick="showScreen('html')">
+                    Start First Lesson →
+                </button>
+            </div>
+
+            <h2>Your Learning Path ✨</h2>
+
+            <p>Choose any topic below. Each one opens its own lesson.</p>
+
+            <div class="cards">
+
+                <article class="card">
+                    <div class="emoji">🏗️</div>
+                    <h3>HTML Fundamentals</h3>
+                    <p>Learn webpage structure, tags, headings and paragraphs.</p>
+                    <button onclick="showScreen('html')">Open Lesson →</button>
+                </article>
+
+                <article class="card">
+                    <div class="emoji">🧩</div>
+                    <h3>HTML Elements</h3>
+                    <p>Understand links, images, lists and semantic elements.</p>
+                    <button onclick="showScreen('elements')">Open Lesson →</button>
+                </article>
+
+                <article class="card">
+                    <div class="emoji">🎨</div>
+                    <h3>CSS Fundamentals</h3>
+                    <p>Style your pages with colors, fonts and backgrounds.</p>
+                    <button onclick="showScreen('css')">Open Lesson →</button>
+                </article>
+
+                <article class="card">
+                    <div class="emoji">📐</div>
+                    <h3>Layouts & Responsive Design</h3>
+                    <p>Learn Box Model, Flexbox, Grid and media queries.</p>
+                    <button onclick="showScreen('layout')">Open Lesson →</button>
+                </article>
+
+            </div>
+
+            <div class="lesson-box">
+                <h3>💡 How to use this website</h3>
+                <p>1. Select a topic from the left sidebar.</p>
+                <p>2. Read the explanation and understand the code.</p>
+                <p>3. Study the output to connect code with its result.</p>
+                <p>4. Complete the quiz to check your understanding.</p>
+            </div>
+
+        </section>
+
+
+        <!-- HTML BASICS -->
+
+        <section class="screen" id="html">
+
+            <div class="lesson-intro">
+                <span class="lesson-number">LESSON 01 · BEGINNER</span>
+                <h1>HTML <span class="gradient">Basics</span></h1>
+                <p>Learn how a webpage gets its structure.</p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>What is HTML?</h3>
+                <p>
+                    HTML stands for HyperText Markup Language. It defines
+                    the structure and content of a webpage.
+                </p>
+                <p>
+                    Think of a website as a house: HTML creates the structure,
+                    CSS decorates it, and JavaScript adds interactive behaviour.
+                </p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>Your first HTML document</h3>
+
+                <div class="code"><span class="pink">&lt;!DOCTYPE html&gt;</span>
+<span class="pink">&lt;html lang="en"&gt;</span>
+  <span class="pink">&lt;head&gt;</span>
+    <span class="pink">&lt;title&gt;</span>My First Website<span class="pink">&lt;/title&gt;</span>
+  <span class="pink">&lt;/head&gt;</span>
+  <span class="pink">&lt;body&gt;</span>
+    <span class="pink">&lt;h1&gt;</span>Hello World!<span class="pink">&lt;/h1&gt;</span>
+    <span class="pink">&lt;p&gt;</span>Welcome to HTML.<span class="pink">&lt;/p&gt;</span>
+  <span class="pink">&lt;/body&gt;</span>
+<span class="pink">&lt;/html&gt;</span></div>
+
+                <h3>Understand each part</h3>
+                <p><b>&lt;!DOCTYPE html&gt;</b> tells the browser to use modern HTML.</p>
+                <p><b>&lt;head&gt;</b> contains page information, such as the title.</p>
+                <p><b>&lt;body&gt;</b> contains the webpage content users see.</p>
+                <p><b>&lt;h1&gt;</b> creates a main heading.</p>
+                <p><b>&lt;p&gt;</b> creates a paragraph.</p>
+
+                <div class="output">
+                    <h2>Hello World!</h2>
+                    <p>Welcome to HTML.</p>
+                </div>
+
+                <div class="tip">
+                    Remember: most HTML elements have an opening tag,
+                    content and a closing tag. Some elements, such as
+                    img and br, do not need a closing tag.
+                </div>
+            </div>
+
+            <div class="lesson-box">
+                <h3>Try it yourself</h3>
+                <p>Create a file called <b>index.html</b>, write the example
+                code in it, and open it in your browser.</p>
+            </div>
+
+            <div class="lesson-nav">
+                <button class="secondary" onclick="showScreen('home')">← Home</button>
+                <button class="primary" onclick="showScreen('elements')">Next Lesson →</button>
+            </div>
+
+        </section>
+
+
+        <!-- HTML ELEMENTS -->
+
+        <section class="screen" id="elements">
+
+            <div class="lesson-intro">
+                <span class="lesson-number">LESSON 02 · BEGINNER</span>
+                <h1>HTML <span class="gradient">Elements</span></h1>
+                <p>Learn how to add useful content to your webpage.</p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>1. Links</h3>
+                <p>The anchor element creates a clickable link.</p>
+                <div class="code">&lt;a href="https://example.com"&gt;Visit Website&lt;/a&gt;</div>
+                <div class="output">
+                    <a href="https://example.com" target="_blank"
+                    rel="noopener noreferrer" style="color:#8055e8">
+                    Visit Website ↗</a>
+                </div>
+            </div>
+
+            <div class="lesson-box">
+                <h3>2. Images</h3>
+                <p>The img element displays an image. The alt attribute
+                provides alternative text describing the image.</p>
+                <div class="code">&lt;img src="flower.jpg" alt="A beautiful flower"&gt;</div>
+                <div class="tip">
+                    Keep your image file in the correct folder, or use a valid
+                    image URL. Always provide meaningful alt text.
+                </div>
+            </div>
+
+            <div class="lesson-box">
+                <h3>3. Lists</h3>
+                <p>Use ul for an unordered list and ol for a numbered list.</p>
+                <div class="code">&lt;ul&gt;
+  &lt;li&gt;HTML&lt;/li&gt;
+  &lt;li&gt;CSS&lt;/li&gt;
+  &lt;li&gt;JavaScript&lt;/li&gt;
+&lt;/ul&gt;</div>
+                <div class="output">
+                    <ul style="padding-left:22px">
+                        <li>HTML</li>
+                        <li>CSS</li>
+                        <li>JavaScript</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="lesson-box">
+                <h3>4. Semantic HTML</h3>
+                <p>
+                    Semantic elements describe the purpose of their content.
+                    Examples include header, nav, main, section, article and footer.
+                </p>
+                <div class="code">&lt;header&gt;Website Header&lt;/header&gt;
+&lt;main&gt;
+  &lt;article&gt;Main Article&lt;/article&gt;
+&lt;/main&gt;
+&lt;footer&gt;Website Footer&lt;/footer&gt;</div>
+            </div>
+
+            <div class="lesson-nav">
+                <button class="secondary" onclick="showScreen('html')">← Previous</button>
+                <button class="primary" onclick="showScreen('css')">Next Lesson →</button>
+            </div>
+
+        </section>
+
+
+        <!-- CSS BASICS -->
+
+        <section class="screen" id="css">
+
+            <div class="lesson-intro">
+                <span class="lesson-number">LESSON 03 · BEGINNER</span>
+                <h1>CSS <span class="gradient">Basics</span></h1>
+                <p>Transform plain HTML into an attractive webpage.</p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>What is CSS?</h3>
+                <p>
+                    CSS stands for Cascading Style Sheets. It controls the
+                    appearance, spacing, colors and layout of HTML elements.
+                </p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>CSS syntax</h3>
+                <div class="code"><span class="pink">h1</span> {
+    <span class="blue">color:</span> <span class="green">purple;</span>
+    <span class="blue">font-size:</span> <span class="green">32px;</span>
+}</div>
+
+                <p><b>Selector:</b> h1 selects the heading.</p>
+                <p><b>Property:</b> color is the style you want to change.</p>
+                <p><b>Value:</b> purple is the value assigned to color.</p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>Important CSS properties</h3>
+                <p><b>color:</b> changes text color.</p>
+                <p><b>background-color:</b> changes the background color.</p>
+                <p><b>font-size:</b> changes text size.</p>
+                <p><b>margin:</b> creates space outside an element's border.</p>
+                <p><b>padding:</b> creates space inside an element's border.</p>
+                <p><b>border-radius:</b> rounds the corners of an element.</p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>Class selectors</h3>
+                <p>A class lets you apply the same style to multiple elements.</p>
+                <div class="code"><span class="pink">.my-card</span> {
+    <span class="blue">background-color:</span> <span class="green">#f0eaff;</span>
+    <span class="blue">padding:</span> <span class="green">20px;</span>
+    <span class="blue">border-radius:</span> <span class="green">12px;</span>
+}</div>
+                <p>In HTML, use <b>class="my-card"</b> on an element to apply
+                the style. The dot in .my-card identifies a CSS class selector.</p>
+
+                <div class="output" style="background:#f0eaff;border:0">
+                    <h3 style="color:#8055e8">Beautiful Card ✨</h3>
+                    <p>This is an example of a styled card.</p>
+                </div>
+            </div>
+
+            <div class="lesson-nav">
+                <button class="secondary" onclick="showScreen('elements')">← Previous</button>
+                <button class="primary" onclick="showScreen('box')">Next Lesson →</button>
+            </div>
+
+        </section>
+
+
+        <!-- BOX MODEL -->
+
+        <section class="screen" id="box">
+
+            <div class="lesson-intro">
+                <span class="lesson-number">LESSON 04 · BEGINNER+</span>
+                <h1>The CSS <span class="gradient">Box Model</span></h1>
+                <p>Understand how browsers calculate space around elements.</p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>Four parts of the Box Model</h3>
+                <p><b>Content:</b> the text or image inside the element.</p>
+                <p><b>Padding:</b> space between content and border.</p>
+                <p><b>Border:</b> the line surrounding padding and content.</p>
+                <p><b>Margin:</b> space outside the border.</p>
+
+                <div style="background:#e5dcff;padding:24px;border-radius:12px;text-align:center;margin-top:20px">
+                    <b>Margin = outside space</b>
+                    <div style="background:#c9b5ff;padding:20px;margin-top:12px;border-radius:8px">
+                        Border
+                        <div style="background:white;padding:22px;margin-top:12px;border:3px solid #8055e8;border-radius:8px">
+                            Padding
+                            <div style="background:#fce7f3;padding:18px;margin-top:10px;border-radius:5px">
+                                Content
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box">
+                <h3>Why use box-sizing: border-box?</h3>
+                <div class="code"><span class="pink">*</span> {
+    <span class="blue">box-sizing:</span> <span class="green">border-box;</span>
+}</div>
+                <p>This makes the declared width include the content, padding
+                and border, which makes many layouts easier to manage.</p>
+            </div>
+
+            <div class="lesson-nav">
+                <button class="secondary" onclick="showScreen('css')">← Previous</button>
+                <button class="primary" onclick="showScreen('layout')">Next Lesson →</button>
+            </div>
+
+        </section>
+
+
+        <!-- FLEXBOX AND GRID -->
+
+        <section class="screen" id="layout">
+
+            <div class="lesson-intro">
+                <span class="lesson-number">LESSON 05 · INTERMEDIATE</span>
+                <h1>Flexbox <span class="gradient">& Grid</span></h1>
+                <p>Learn how to organize elements into modern layouts.</p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>Flexbox</h3>
+                <p>Flexbox is useful for arranging items in a row or column.</p>
+                <div class="code"><span class="pink">.container</span> {
+    <span class="blue">display:</span> <span class="green">flex;</span>
+    <span class="blue">justify-content:</span> <span class="green">center;</span>
+    <span class="blue">align-items:</span> <span class="green">center;</span>
+    <span class="blue">gap:</span> <span class="green">15px;</span>
+}</div>
+                <p>justify-content aligns items along the main axis.
+                align-items aligns items along the cross axis.</p>
+
+                <div style="display:flex;justify-content:center;align-items:center;gap:10px;background:#f0eaff;padding:20px;border-radius:10px;flex-wrap:wrap">
+                    <div style="background:#8055e8;color:white;padding:18px;border-radius:8px">Item 1</div>
+                    <div style="background:#b58af5;color:white;padding:18px;border-radius:8px">Item 2</div>
+                    <div style="background:#ed9edc;color:#432344;padding:18px;border-radius:8px">Item 3</div>
+                </div>
+            </div>
+
+            <div class="lesson-box">
+                <h3>CSS Grid</h3>
+                <p>Grid is useful for two-dimensional rows and columns.</p>
+                <div class="code"><span class="pink">.cards</span> {
+    <span class="blue">display:</span> <span class="green">grid;</span>
+    <span class="blue">grid-template-columns:</span>
+        <span class="green">repeat(3, 1fr);</span>
+    <span class="blue">gap:</span> <span class="green">20px;</span>
+}</div>
+                <p>Here, repeat(3, 1fr) creates three equal-width columns.</p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>When to use which?</h3>
+                <p><b>Flexbox:</b> navigation bars, button groups and single-direction layouts.</p>
+                <p><b>Grid:</b> card collections, galleries and row-and-column layouts.</p>
+            </div>
+
+            <div class="lesson-nav">
+                <button class="secondary" onclick="showScreen('box')">← Previous</button>
+                <button class="primary" onclick="showScreen('responsive')">Next Lesson →</button>
+            </div>
+
+        </section>
+
+
+        <!-- RESPONSIVE DESIGN -->
+
+        <section class="screen" id="responsive">
+
+            <div class="lesson-intro">
+                <span class="lesson-number">LESSON 06 · INTERMEDIATE</span>
+                <h1>Responsive <span class="gradient">Design</span></h1>
+                <p>Make your website adapt to mobile, tablet and desktop screens.</p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>What is responsive design?</h3>
+                <p>
+                    Responsive design allows a website to adapt its layout
+                    to different screen sizes instead of requiring a separate
+                    page for each device.
+                </p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>Media queries</h3>
+                <div class="code"><span class="pink">.cards</span> {
+    <span class="blue">display:</span> <span class="green">grid;</span>
+    <span class="blue">grid-template-columns:</span>
+        <span class="green">repeat(3, 1fr);</span>
+}
+
+<span class="pink">@media (max-width: 600px)</span> {
+    <span class="pink">.cards</span> {
+        <span class="blue">grid-template-columns:</span>
+            <span class="green">1fr;</span>
+    }
+}</div>
+                <p>
+                    On larger screens, this example creates three columns.
+                    When the viewport is 600px wide or less, it changes to
+                    a single column.
+                </p>
+            </div>
+
+            <div class="lesson-box">
+                <h3>More responsive design tips</h3>
+                <p>• Add the viewport meta tag in your HTML head.</p>
+                <p>• Use flexible widths and CSS Grid or Flexbox.</p>
+                <p>• Avoid fixed widths that make content overflow.</p>
+                <p>• Test the page at different screen sizes.</p>
+            </div>
+
+            <div class="lesson-nav">
+                <button class="secondary" onclick="showScreen('layout')">← Previous</button>
+                <button class="primary" onclick="showScreen('quiz')">Test Your Knowledge →</button>
+            </div>
+
+        </section>
+
+
+        <!-- QUIZ -->
+
+        <section class="screen" id="quiz">
+
+            <div class="lesson-intro">
+                <span class="lesson-number">PRACTICE ZONE</span>
+                <h1>Test Your <span class="gradient">Knowledge 🧠</span></h1>
+                <p>Answer five questions based on your HTML and CSS lessons.</p>
+            </div>
+
+            <div class="lesson-box">
+                <p id="quiz-count">Question 1 of 5</p>
+                <h3 id="quiz-question">What does HTML do?</h3>
+                <div id="quiz-options"></div>
+                <p id="quiz-feedback" aria-live="polite"></p>
+                <button class="primary" id="quiz-next" disabled>Next Question →</button>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<footer>
+    ✿ CodeBloom — Learn something new, one line at a time.
+</footer>
+
+
+<script>
+/* Switch between separate learning screens */
+
+function showScreen(screenId) {
+    const screens = document.querySelectorAll(".screen");
+    const topics = document.querySelectorAll(".topic");
+
+    screens.forEach(function(screen) {
+        screen.classList.remove("active");
+    });
+
+    topics.forEach(function(topic) {
+        topic.classList.toggle(
+            "active",
+            topic.dataset.screen === screenId
+        );
+    });
+
+    const selectedScreen = document.getElementById(screenId);
+
+    if (selectedScreen) {
+        selectedScreen.classList.add("active");
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+
+/* Quiz questions and answers */
+
+const questions = [
+    {
+        question: "What does HTML do?",
+        options: [
+            "Structures webpage content",
+            "Only changes text colors",
+            "Creates computer hardware",
+            "Only adds animations"
+        ],
+        answer: 0,
+        explanation: "HTML defines the structure and content of a webpage."
+    },
+    {
+        question: "Which property changes text color?",
+        options: ["font-size", "color", "margin", "display"],
+        answer: 1,
+        explanation: "The CSS color property sets the text's foreground color."
+    },
+    {
+        question: "What does padding create?",
+        options: [
+            "Space outside the border",
+            "A new HTML page",
+            "Space between content and border",
+            "A hyperlink"
+        ],
+        answer: 2,
+        explanation: "Padding is the space between an element's content and its border."
+    },
+    {
+        question: "Which CSS layout is designed for rows and columns?",
+        options: ["Grid", "Title", "Paragraph", "Alt"],
+        answer: 0,
+        explanation: "CSS Grid is designed for two-dimensional layouts."
+    },
+    {
+        question: "What is a media query used for?",
+        options: [
+            "Changing an HTML title",
+            "Creating an image",
+            "Writing a paragraph",
+            "Applying styles under certain conditions"
+        ],
+        answer: 3,
+        explanation: "Media queries can apply different CSS styles based on viewport conditions."
+    }
+];
+
+let questionIndex = 0;
+let quizScore = 0;
+let hasAnswered = false;
+
+const count = document.getElementById("quiz-count");
+const questionTitle = document.getElementById("quiz-question");
+const optionsArea = document.getElementById("quiz-options");
+const feedback = document.getElementById("quiz-feedback");
+const next = document.getElementById("quiz-next");
+
+
+function loadQuizQuestion() {
+    hasAnswered = false;
+
+    const item = questions[questionIndex];
+
+    count.textContent =
+        "Question " + (questionIndex + 1) + " of " + questions.length;
+
+    questionTitle.textContent = item.question;
+    feedback.textContent = "";
+    optionsArea.replaceChildren();
+    next.disabled = true;
+    next.textContent =
+        questionIndex === questions.length - 1
+            ? "View Results →"
+            : "Next Question →";
+
+    item.options.forEach(function(option, index) {
+        const button = document.createElement("button");
+
+        button.className = "quiz-option";
+        button.textContent = option;
+
+        button.addEventListener("click", function() {
+            checkAnswer(index);
+        });
+
+        optionsArea.appendChild(button);
+    });
+}
+
+
+function checkAnswer(selected) {
+    if (hasAnswered) return;
+
+    hasAnswered = true;
+
+    const item = questions[questionIndex];
+    const buttons = optionsArea.querySelectorAll("button");
+
+    buttons.forEach(function(button) {
+        button.disabled = true;
+    });
+
+    buttons[item.answer].classList.add("correct");
+
+    if (selected === item.answer) {
+        quizScore++;
+        feedback.textContent = "Correct! " + item.explanation;
+        feedback.style.color = "#16845b";
+    } else {
+        buttons[selected].classList.add("wrong");
+        feedback.textContent = "Not quite. " + item.explanation;
+        feedback.style.color = "#c44965";
+    }
+
+    next.disabled = false;
+}
+
+
+next.addEventListener("click", function() {
+    if (!hasAnswered) return;
+
+    if (questionIndex < questions.length - 1) {
+        questionIndex++;
+        loadQuizQuestion();
+    } else {
+        count.textContent = "Quiz completed!";
+        questionTitle.textContent =
+            "Your score: " + quizScore + " / " + questions.length;
+
+        optionsArea.replaceChildren();
+
+        feedback.textContent =
+            quizScore >= 4
+                ? "Excellent work! Keep learning and building. ✨"
+                : "Good effort! Review the lessons and try again. 🌱";
+
+        next.textContent = "Try Again ↻";
+        next.disabled = false;
+
+        next.onclick = function() {
+            questionIndex = 0;
+            quizScore = 0;
+            next.onclick = null;
+            loadQuizQuestion();
+        };
+    }
+});
+
+
+loadQuizQuestion();
+</script>
+
+</body>
+</html>
+```
